@@ -1,0 +1,5 @@
+doc-warnings: true
+strictness: high
+max-line-length: 80
+pyroma:
+  run: true
