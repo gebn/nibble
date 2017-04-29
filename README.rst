@@ -1,12 +1,6 @@
 nibble
 ======
 
-.. image:: https://img.shields.io/pypi/status/nibble.svg
-   :target: https://pypi.python.org/pypi/nibble
-.. image:: https://img.shields.io/pypi/v/nibble.svg
-   :target: https://pypi.python.org/pypi/nibble
-.. image:: https://img.shields.io/pypi/pyversions/nibble.svg
-   :target: https://pypi.python.org/pypi/nibble
 .. image:: https://travis-ci.org/gebn/nibble.svg?branch=master
    :target: https://travis-ci.org/gebn/nibble
 .. image:: https://coveralls.io/repos/github/gebn/nibble/badge.svg?branch=master
