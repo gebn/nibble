@@ -21,7 +21,8 @@ def _read_file(name, encoding='utf-8'):
 setup(
     name='nibble',
     version=nibble.__version__,
-    description='Speed, distance and time calculations around quantities of digital information.',
+    description='Speed, distance and time calculations around quantities of '
+                'digital information.',
     long_description=_read_file('README.rst'),
     license='MIT',
     url='https://github.com/gebn/nibble',
