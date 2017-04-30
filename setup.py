@@ -29,6 +29,7 @@ setup(
     author='George Brighton',
     author_email='oss@gebn.co.uk',
     packages=find_packages(),
+    zip_safe=True,
     install_requires=[
         'six>=1.9.0'
     ],
