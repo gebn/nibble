@@ -150,7 +150,7 @@ class Information(object):
         :param unit: The size of the unit in bits, e.g. MiB = 8388608 bits.
                      Defaults to bits.
         """
-        self.bits = math.ceil(quantity * unit)
+        self.bits = int(math.ceil(quantity * unit))
 
     @classmethod
     def parse(cls, string):
