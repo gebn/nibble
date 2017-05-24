@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, division
 import re
 import math
 import six
+
+from nibble.util import operator_same_class
 
 
 @six.python_2_unicode_compatible
@@ -182,10 +184,45 @@ class Information(object):
 
         return Information(quantity, unit)
 
+    @operator_same_class
+    def __lt__(self, other):
+        return self.bits < other.bits
+
+    def __le__(self, other):
+        return self < other or self == other
+
+    @operator_same_class
     def __eq__(self, other):
-        if not isinstance(other, self.__class__):
-            raise NotImplementedError()
         return other.bits == self.bits
+
+    def __ne__(self, other):
+        return not other == self
+
+    def __ge__(self, other):
+        return self == other or self > other
+
+    @operator_same_class
+    def __gt__(self, other):
+        return self.bits > other.bits
+
+    @operator_same_class
+    def __add__(self, other):
+        return Information(self.bits + other.bits)
+
+    @operator_same_class
+    def __sub__(self, other):
+        if self.bits - other.bits < 0:
+            raise ArithmeticError(
+                'Cannot have a negative amount of information')
+        return Information(self.bits - other.bits)
+
+    @operator_same_class
+    def __mul__(self, other):
+        return Information(self.bits * other.bits)
+
+    @operator_same_class
+    def __truediv__(self, other):
+        return Information(self.bits / other.bits)
 
     def __repr__(self):
         return '<Information({0})>'.format(self.bits)
