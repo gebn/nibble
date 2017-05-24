@@ -13,7 +13,8 @@ class Information(object):
     Represents a quantity of digital information.
     """
 
-    PARSE_REGEX = re.compile(r'(\d+(?:\.\d+)?|\.\d+)(?: +)?(\w+)')
+    # this is deliberately lax with the number to provide a more helpful err msg
+    PARSE_REGEX = re.compile(r'([\d\\.]+)(?: +)?(\w+)')
 
     BITS = 1
     NIBBLES = 4
