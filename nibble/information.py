@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import re
+import math
 import six
 
 
@@ -147,7 +148,7 @@ class Information(object):
         :param unit: The size of the unit in bits, e.g. MiB = 8388608 bits.
                      Defaults to bits.
         """
-        self.bits = int(quantity * unit)
+        self.bits = math.ceil(quantity * unit)
 
     @classmethod
     def parse(cls, string):
