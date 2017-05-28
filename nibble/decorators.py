@@ -77,3 +77,20 @@ def python_2_nonzero_compatible(klass):
                 'it doesn\'t define __bool__().'.format(klass.__name__))
         klass.__nonzero__ = klass.__bool__
     return klass
+
+
+def python_2_div_compatible(klass):
+    """
+    Adds a `__div__()` method to classes that define a `__floordiv__()` method,
+    so division works in Python 2. Has no effect in Python 3.
+
+    :param klass: The class to modify. Must define `__floordiv__()`.
+    :return: The possibly patched class.
+    """
+    if six.PY2:
+        if '__floordiv__' not in klass.__dict__:
+            raise ValueError(
+                '@python_2_div_compatible cannot be applied to {0} because it '
+                'doesn\'t define __floordiv__().'.format(klass.__name__))
+        klass.__div__ = klass.__floordiv__
+    return klass

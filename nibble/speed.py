@@ -7,6 +7,7 @@ from nibble.duration import Duration
 from nibble import decorators
 
 
+@decorators.python_2_div_compatible
 @decorators.python_2_nonzero_compatible
 @six.python_2_unicode_compatible
 class Speed(object):

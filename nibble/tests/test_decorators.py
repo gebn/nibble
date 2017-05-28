@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, division
 import unittest
 import six
 
@@ -96,3 +96,42 @@ class TestPython2NonzeroCompatible(unittest.TestCase):
     @unittest.skipUnless(six.PY3, 'Only applies to Python 3')
     def test_py3(self):
         self.assertFalse(hasattr(self.Inner(True), '__nonzero__'))
+
+
+class TestPython2DivCompatible(unittest.TestCase):
+
+    @decorators.python_2_div_compatible
+    class Inner(object):
+
+        def __init__(self, val):
+            self.val = val
+
+        def __floordiv__(self, other):
+            return self.val // other
+
+        def __truediv__(self, other):
+            return self.val / other
+
+    @unittest.skipUnless(six.PY2, 'Only applies to Python 2')
+    def test_py2_div(self):
+        self.assertEqual(self.Inner(5).__div__(3), 1)
+
+    @unittest.skipUnless(six.PY2, 'Only applies to Python 2')
+    def test_py2_floordiv(self):
+        self.assertEqual(self.Inner(5) // 3, 1)
+
+    @unittest.skipUnless(six.PY2, 'Only applies to Python 2')
+    def test_py2_truediv(self):
+        self.assertAlmostEqual(self.Inner(5) / 3, 1.66666666)
+
+    @unittest.skipUnless(six.PY2, 'Only applies to Python 2')
+    def test_no_floordiv_method(self):
+        with self.assertRaises(ValueError):
+            # noinspection PyUnusedLocal
+            @decorators.python_2_div_compatible
+            class NoFloordiv(object):
+                pass
+
+    @unittest.skipUnless(six.PY3, 'Only applies to Python 3')
+    def test_py3(self):
+        self.assertFalse(hasattr(self.Inner(None), '__div__'))
