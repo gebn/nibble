@@ -42,6 +42,21 @@ class Duration(object):
 
     def __init__(self, nanoseconds=0, microseconds=0, milliseconds=0, seconds=0,
                  minutes=0, hours=0, days=0, weeks=0, months=0, years=0):
+        """
+        Initialise a new Duration instance. The instance will be made to
+        represent the closest nanosecond to the sum of all of the arguments.
+
+        :param nanoseconds: The number of nanoseconds to represent.
+        :param microseconds: The number of microseconds to represent.
+        :param milliseconds: The number of milliseconds to represent.
+        :param seconds: The number of seconds to represent.
+        :param minutes: The number of minutes to represent.
+        :param hours: The number of hours to represent.
+        :param days: The number of days to represent.
+        :param weeks: The number of weeks to represent.
+        :param months: The number of months to represent.
+        :param years: The number of years to represent.
+        """
         self.nanoseconds = int(round(nanoseconds +  # Py2 round() returns float
                                      microseconds * self.MICROSECONDS +
                                      milliseconds * self.MILLISECONDS +
@@ -55,19 +70,31 @@ class Duration(object):
 
     @property
     def timedelta(self):
+        """
+        Get a `datetime.timedelta` representing this instance.
+
+        :return: A timedelta equivalent to this instance. Some accuracy is lost,
+                 as timedelta only goes down to the microsecond level.
+        """
         return datetime.timedelta(microseconds=self.nanoseconds / 1000)
 
     def total_seconds(self):
         """
-        For compatibility with timedelta (which is also why this isn't a
-        property).
-        
+        Retrieve the number of seconds equivalent to this duration. This is
+        compatible with `datetime.timedelta`'s identically named method.
+
         :return: The number of seconds represented by this duration, as a float.
         """
         return self.nanoseconds / 10 ** 9
 
     @classmethod
     def from_timedelta(cls, timedelta):
+        """
+        Create a duration from a timedelta instance.
+
+        :param timedelta: The `datetime.timedelta` to parse.
+        :return: A `Duration` representing the same duration.
+        """
         return Duration(seconds=timedelta.total_seconds())
 
     @decorators.operator_same_class

@@ -12,7 +12,7 @@ from nibble import decorators
 @six.python_2_unicode_compatible
 class Information(object):
     """
-    Represents a quantity of digital information.
+    Represents a quantity of digital information as a number of bits.
     """
 
     # this is deliberately lax with the number to provide a more helpful error
@@ -284,11 +284,30 @@ class Information(object):
 
     @classmethod
     def _expand_units(cls, category):
+        """
+        Turn a list of units into an ordered dictionary mapping those units
+        to the number of bits 1 of that unit represents, e.g. 'B' (byte) will
+        map to 8.
+
+        :param category: The list of units to map.
+        :return: The resulting ordered dictionary.
+        """
         return OrderedDict([(symbol, cls._SYMBOLS[symbol])
                             for symbol in category])
 
     @classmethod
     def _determine_unit_symbol_quantity(cls, bits, category):
+        """
+        Given a list of units in descending order of size, choose the one most
+        appropriate to represent a number of bits.
+
+        :param bits: The number of bits to represent.
+        :param category: A list containing choices of units we can choose from.
+                         This must be in descending order of size, so largest
+                         unit first.
+        :return: The unit that should be used to represent `bits`. An element
+                 in the input `category` list.
+        """
 
         # unit: bits
         expanded = cls._expand_units(category)
