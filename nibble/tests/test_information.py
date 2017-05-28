@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, division
 import unittest
+from collections import OrderedDict
 import six
 
 from nibble.information import Information
@@ -172,6 +173,12 @@ class TestInformation(unittest.TestCase):
 
     def test_bool_false(self):
         self.assertFalse(Information.ZERO)
+
+    def test_expand_units(self):
+        units = ['TiB', 'B', 'YiB']
+        self.assertEqual(Information._expand_units(units),
+                         OrderedDict([(unit, Information._SYMBOLS[unit])
+                                      for unit in units]))
 
     def test_determine_unit_symbol_quantity(self):
         for category in [Information.BINARY_BITS, Information.BINARY_BYTES,
