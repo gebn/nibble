@@ -48,6 +48,11 @@ class TestDuration(unittest.TestCase):
         self.assertEqual(Duration(seconds=1.5).total_seconds(),
                          datetime.timedelta(seconds=1.5).total_seconds())
 
+    def test_from_timedelta(self):
+        self.assertEqual(
+            Duration.from_timedelta(datetime.timedelta(milliseconds=3500)),
+            Duration(seconds=3.5))
+
     def test_timedelta(self):
         self.assertEqual(Duration(minutes=91.5).timedelta,
                          datetime.timedelta(seconds=5490))
