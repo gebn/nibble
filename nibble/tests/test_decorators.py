@@ -82,7 +82,7 @@ class TestPython2NonzeroCompatible(unittest.TestCase):
         self.assertTrue(self.Inner(True))
 
     @unittest.skipUnless(six.PY2, 'Only applies to Python 2')
-    def test_py2_true(self):
+    def test_py2_false(self):
         self.assertFalse(self.Inner(False))
 
     @unittest.skipUnless(six.PY2, 'Only applies to Python 2')
