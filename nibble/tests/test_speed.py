@@ -180,7 +180,7 @@ class TestSpeed(unittest.TestCase):
 
     def test_format_invalid_time_unit(self):
         with self.assertRaises(TypeError):
-            '{0:/z}'.format(self._DURATION)
+            '{0:/z}'.format(self._SPEED)
 
     def test_format_invalid_info_unit(self):
         with self.assertRaises(TypeError):
