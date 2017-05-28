@@ -359,7 +359,7 @@ class Information(object):
             quantity = self.bits / self._SYMBOLS[unit]
         else:
             raise TypeError(
-                'Unrecognised unit or category: {0}'.format(symbol))
+                'Unrecognised information unit or category: {0}'.format(symbol))
 
         if not num_fmt:
             num_fmt = ',.0f' if quantity.is_integer() else ',.2f'
