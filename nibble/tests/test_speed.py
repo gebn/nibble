@@ -178,6 +178,14 @@ class TestSpeed(unittest.TestCase):
         # force Gb
         self.assertEqual('{0:Gb}'.format(Speed.GIGABIT), '1Gb/s')
 
+    def test_format_invalid_time_unit(self):
+        with self.assertRaises(TypeError):
+            '{0:/z}'.format(self._DURATION)
+
+    def test_format_invalid_info_unit(self):
+        with self.assertRaises(TypeError):
+            '{0:foo}'.format(self._DURATION)
+
     def test_format_separator_info_unit(self):
         speed = Speed(Information(1, Information.TERABITS), Duration.SECOND)
         self.assertEqual('{0: Gb}'.format(speed), '1,000 Gb/s')
