@@ -180,7 +180,7 @@ class Duration(object):
             if not unit:
                 unit = 'ns'
         elif unit not in self.UNITS:
-                raise TypeError('Undefined unit: {0}'.format(unit))
+            raise TypeError('Undefined unit: {0}'.format(unit))
 
         quantity = self.nanoseconds / self.UNITS[unit]
 
