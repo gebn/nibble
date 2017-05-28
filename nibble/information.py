@@ -1,20 +1,23 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, division
+from collections import OrderedDict
 import re
 import math
 import six
 
-from nibble.util import operator_same_class
+from nibble import decorators
 
 
+@decorators.python_2_nonzero_compatible
 @six.python_2_unicode_compatible
 class Information(object):
     """
     Represents a quantity of digital information.
     """
 
-    # this is deliberately lax with the number to provide a more helpful err msg
-    PARSE_REGEX = re.compile(r'([\d\\.]+)(?: +)?(\w+)')
+    # this is deliberately lax with the number to provide a more helpful error
+    # message
+    _PARSE_REGEX = re.compile(r'([\d\\.]+)(?: +)?(\w+)')
 
     BITS = 1
     NIBBLES = 4
@@ -143,6 +146,19 @@ class Information(object):
         'yb': YOTTABITS
     }
 
+    BINARY_BITS = ['Yib', 'Zib', 'Eib', 'Pib', 'Tib', 'Gib', 'Mib', 'Kib', 'b']
+    BINARY_BYTES = ['YiB', 'ZiB', 'EiB', 'PiB', 'TiB', 'GiB', 'MiB', 'KiB', 'B',
+                    'b']
+    DECIMAL_BITS = ['Yb', 'Zb', 'Eb', 'Pb', 'Tb', 'Gb', 'Mb', 'Kb', 'b']
+    DECIMAL_BYTES = ['YB', 'ZB', 'EB', 'PB', 'TB', 'GB', 'MB', 'KB', 'B', 'b']
+
+    _CATEGORY_MAPS = {
+        'bB': BINARY_BYTES,
+        'dB': DECIMAL_BYTES,
+        'bb': BINARY_BITS,
+        'db': DECIMAL_BITS
+    }
+
     def __init__(self, quantity, unit=BITS):
         """
         Initialise a new information object.
@@ -151,7 +167,34 @@ class Information(object):
         :param unit: The size of the unit in bits, e.g. MiB = 8388608 bits.
                      Defaults to bits.
         """
-        self.bits = int(math.ceil(quantity * unit))
+        bits = quantity * unit
+        if isinstance(bits, float):
+            bits = int(math.ceil(bits))
+
+        self.bits = bits
+
+    def at_speed(self, speed):
+        """
+        Find how long it would take to process this amount of data at a certain
+        speed.
+
+        :param speed: The speed of processing.
+        :return: The time taken as a `datetime.timedelta`.
+        """
+        from nibble.duration import Duration
+        scale = self.bits / speed.information.bits
+        return Duration(seconds=speed.duration.total_seconds() * scale)
+
+    def in_duration(self, duration):
+        """
+        Find the speed of processing if this quantity of information is
+        processed in a given time.
+
+        :param duration: The time taken to process this amount of data.
+        :return: The speed of the processing.
+        """
+        from nibble.speed import Speed
+        return Speed(self, duration)
 
     @classmethod
     def parse(cls, string):
@@ -163,7 +206,7 @@ class Information(object):
         :raises ValueError: If the string could not be parsed. Check the message
                             for the reason why.
         """
-        result = cls.PARSE_REGEX.match(string.strip())
+        result = cls._PARSE_REGEX.match(string.strip())
         if not result:
             raise ValueError(
                 'Unable to parse information string: {0}'.format(string))
@@ -185,16 +228,16 @@ class Information(object):
 
         return Information(quantity, unit)
 
-    @operator_same_class
+    @decorators.operator_same_class
     def __lt__(self, other):
         return self.bits < other.bits
 
     def __le__(self, other):
         return self < other or self == other
 
-    @operator_same_class
+    @decorators.operator_same_class
     def __eq__(self, other):
-        return other.bits == self.bits
+        return self.bits == other.bits
 
     def __ne__(self, other):
         return not other == self
@@ -202,31 +245,110 @@ class Information(object):
     def __ge__(self, other):
         return self == other or self > other
 
-    @operator_same_class
+    @decorators.operator_same_class
     def __gt__(self, other):
         return self.bits > other.bits
 
-    @operator_same_class
+    @decorators.operator_same_class
     def __add__(self, other):
         return Information(self.bits + other.bits)
 
-    @operator_same_class
+    @decorators.operator_same_class
     def __sub__(self, other):
         if self.bits - other.bits < 0:
             raise ArithmeticError(
                 'Cannot have a negative amount of information')
         return Information(self.bits - other.bits)
 
-    @operator_same_class
+    @decorators.operator_numeric_type
     def __mul__(self, other):
-        return Information(self.bits * other.bits)
+        return Information(self.bits * other)
 
-    @operator_same_class
+    @decorators.operator_numeric_type
     def __truediv__(self, other):
-        return Information(self.bits / other.bits)
+        if other == 0:
+            raise ZeroDivisionError('Cannot divide {0} by zero'.format(self))
+        return Information(round(self.bits / other))
+
+    @decorators.operator_numeric_type
+    def __floordiv__(self, other):
+        if other == 0:
+            raise ZeroDivisionError('Cannot divide {0} by zero'.format(self))
+        return Information(self.bits // other)
 
     def __repr__(self):
-        return '<Information({0})>'.format(self.bits)
+        return '<Information({0})>'.format(repr(self.bits))
+
+    def __bool__(self):
+        return self > Information.ZERO
+
+    @classmethod
+    def _expand_units(cls, category):
+        return OrderedDict([(symbol, cls._SYMBOLS[symbol])
+                            for symbol in category])
+
+    @classmethod
+    def _determine_unit_symbol_quantity(cls, bits, category):
+
+        # unit: bits
+        expanded = cls._expand_units(category)
+
+        # find the first unit smaller than or equal to `bits` in size
+        for unit, bits_ in six.iteritems(expanded):
+            if bits >= bits_:
+                # because categories are sorted descending, the first one where
+                # this is true is the unit we should use to avoid <1 of a unit
+                return bits / bits_, unit
+
+        # default to using the largest unit we have
+        last_unit = next(reversed(expanded))
+        return bits / expanded[last_unit], last_unit
+
+    @decorators.python_2_format_compatible
+    def __format__(self, format_spec):
+        # [number format|][ ][unit symbol or category]
+
+        num_fmt, _, symbol = format_spec.rpartition('|')
+
+        if symbol:
+            # separator and/or unit and/or category passed
+
+            # chomp off any separator
+            if symbol[0] == ' ':
+                separator = ' '
+                symbol = symbol[1:]
+            else:
+                # unit provided with no space, so no separator wanted
+                separator = ''
+        else:
+            # no symbol, so default separator
+            separator = ' '
+
+        # the user may have provided a separator but no symbol
+        if not symbol:
+            # default to binary bytes
+            symbol = 'bB'
+
+        # symbol now contains a unit or category - let's find out
+        if symbol in self._SYMBOLS:
+            # specific unit
+            quantity = self.bits / self._SYMBOLS[symbol]
+            unit = symbol
+        elif symbol in self._CATEGORY_MAPS:
+            # category of units
+            quantity, unit = self._determine_unit_symbol_quantity(
+                self.bits, self._CATEGORY_MAPS[symbol])
+        else:
+            raise TypeError(
+                'Unrecognised unit or category: {0}'.format(symbol))
+
+        if not num_fmt:
+            num_fmt = ',.0f' if quantity.is_integer() else ',.2f'
+
+        return '{0:{1}}{2}{3}'.format(quantity, num_fmt, separator, unit)
 
     def __str__(self):
-        return '{0:,} bits'.format(self.bits)
+        return '{0}'.format(self)
+
+
+Information.ZERO = Information(0)
