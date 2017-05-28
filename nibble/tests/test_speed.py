@@ -134,6 +134,10 @@ class TestSpeed(unittest.TestCase):
         with self.assertRaises(TypeError):
             _ = Speed.GIGABIT / ''
 
+    def test_truediv_zero(self):
+        with self.assertRaises(ZeroDivisionError):
+            _ = Speed.GIGABIT / 0
+
     def test_truediv_low(self):  # 1.33 should go down
         self.assertEqual(Speed(Information(4), Duration(1)) / 3,
                          Speed(Information(1), Duration(1)))
@@ -145,6 +149,10 @@ class TestSpeed(unittest.TestCase):
     def test_floordiv_bad_class(self):
         with self.assertRaises(TypeError):
             _ = Speed.GIGABIT // ''
+
+    def test_floordiv_zero(self):
+        with self.assertRaises(ZeroDivisionError):
+            _ = Speed.GIGABIT // 0
 
     def test_floordiv_low(self):  # 1.33 should go down
         self.assertEqual(Speed(Information(4), Duration(1)) // 3,

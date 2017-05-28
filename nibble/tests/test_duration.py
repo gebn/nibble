@@ -148,6 +148,10 @@ class TestDuration(unittest.TestCase):
         with self.assertRaises(TypeError):
             Duration(1) / ''
 
+    def test_truediv_zero(self):
+        with self.assertRaises(ZeroDivisionError):
+            _ = Duration(1) / 0
+
     def test_truediv_low(self):  # 1.33 should go down
         self.assertEqual(Duration(4) / 3, Duration(1))
 
@@ -157,6 +161,10 @@ class TestDuration(unittest.TestCase):
     def test_floordiv_bad_class(self):
         with self.assertRaises(TypeError):
             Duration(1) // ''
+
+    def test_floordiv_zero(self):
+        with self.assertRaises(ZeroDivisionError):
+            _ = Duration(1) // 0
 
     def test_floordiv_low(self):  # 1.33 should go down
         self.assertEqual(Duration(4) // 3, Duration(1))

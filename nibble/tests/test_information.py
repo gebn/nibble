@@ -152,6 +152,10 @@ class TestInformation(unittest.TestCase):
         with self.assertRaises(TypeError):
             Information(1) / ''
 
+    def test_truediv_zero(self):
+        with self.assertRaises(ZeroDivisionError):
+            Information(1) / 0
+
     def test_truediv_low(self):  # 1.33 should go down
         self.assertEqual(Information(4) / 3, Information(1))
 
@@ -161,6 +165,10 @@ class TestInformation(unittest.TestCase):
     def test_floordiv_bad_class(self):
         with self.assertRaises(TypeError):
             Information(1) // ''
+
+    def test_floordiv_zero(self):
+        with self.assertRaises(ZeroDivisionError):
+            Information(1) // 0
 
     def test_floordiv_low(self):  # 1.33 should go down
         self.assertEqual(Information(4) // 3, Information(1))
