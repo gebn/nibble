@@ -210,6 +210,9 @@ class TestInformation(unittest.TestCase):
         information = Information(1234, Information.GIBIBYTES)
         self.assertEqual('{0}'.format(information), '1.21 TiB')
 
+    def test_format_zero(self):
+        self.assertEqual('{0}'.format(Information.ZERO), '0 b')
+
     def test_format_separator(self):
         information = Information(1234, Information.GIBIBYTES)
         self.assertEqual('{0: }'.format(information), '1.21 TiB')

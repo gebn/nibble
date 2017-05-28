@@ -171,6 +171,9 @@ class TestSpeed(unittest.TestCase):
     def test_format_default(self):
         self.assertEqual('{0}'.format(Speed.GIGABIT), '119.21 MiB/s')
 
+    def test_format_zero(self):
+        self.assertEqual('{0}'.format(Speed.ZERO), '0 b/s')
+
     def test_format_info_unit(self):
         # force Gb
         self.assertEqual('{0:Gb}'.format(Speed.GIGABIT), '1Gb/s')

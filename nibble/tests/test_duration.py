@@ -218,6 +218,9 @@ class TestDuration(unittest.TestCase):
     def test_format(self):
         self.assertEqual('{0}'.format(Duration(hours=2)), '2h')
 
+    def test_format_zero(self):
+        self.assertEqual('{0}'.format(Duration.ZERO), '0ns')
+
     def test_repr(self):
         self.assertEqual(repr(Duration(minutes=1, seconds=0.1)),
                          '<Duration(60100000000)>')
