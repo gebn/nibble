@@ -169,15 +169,16 @@ class Duration(object):
 
         # if we have a unit, ensure it's valid
         if not unit:
-            # attempt to find a unit where the quantity is >= 1 of that unit
+            # attempt to find the largest unit where the quantity is >= 1 of
+            # that unit
             for symbol, nanos in six.iteritems(self.UNITS):
                 if self.nanoseconds >= nanos:
                     unit = symbol
                     break
 
-            # fall back on years
+            # we should only get here if this object represents 0 nanoseconds
             if not unit:
-                unit = 'y'
+                unit = 'ns'
         elif unit not in self.UNITS:
                 raise TypeError('Undefined unit: {0}'.format(unit))
 
