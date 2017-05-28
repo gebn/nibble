@@ -319,7 +319,7 @@ class Information(object):
                 # this is true is the unit we should use to avoid <1 of a unit
                 return unit
 
-        # default to using the largest unit we have
+        # default to using the smallest unit we have
         return next(reversed(expanded))
 
     @decorators.python_2_format_compatible
