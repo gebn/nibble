@@ -317,11 +317,10 @@ class Information(object):
             if bits >= bits_:
                 # because categories are sorted descending, the first one where
                 # this is true is the unit we should use to avoid <1 of a unit
-                return bits / bits_, unit
+                return unit
 
         # default to using the largest unit we have
-        last_unit = next(reversed(expanded))
-        return bits / expanded[last_unit], last_unit
+        return next(reversed(expanded))
 
     @decorators.python_2_format_compatible
     def __format__(self, format_spec):
@@ -355,8 +354,9 @@ class Information(object):
             unit = symbol
         elif symbol in self._CATEGORY_MAPS:
             # category of units
-            quantity, unit = self._determine_unit_symbol_quantity(
+            unit = self._determine_unit_symbol_quantity(
                 self.bits, self._CATEGORY_MAPS[symbol])
+            quantity = self.bits / self._SYMBOLS[unit]
         else:
             raise TypeError(
                 'Unrecognised unit or category: {0}'.format(symbol))

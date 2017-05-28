@@ -182,14 +182,14 @@ class TestInformation(unittest.TestCase):
                 # amount of data that it is equivalent to
                 self.assertEqual(
                     Information._determine_unit_symbol_quantity(bits, category),
-                    (1, unit))
+                    unit)
 
                 # we should also use the same unit for this number of bits + 1
                 # (assuming units are not close together)
                 self.assertEqual(
                     Information._determine_unit_symbol_quantity(
                         bits + 1, category),
-                    ((bits + 1) / bits, unit))
+                    unit)
 
     def test_format_default(self):
         information = Information(1234, Information.GIBIBYTES)
