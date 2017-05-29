@@ -213,7 +213,7 @@ class TestDuration(unittest.TestCase):
     # FIXME
     @unittest.skip('Issue #1')
     def test_format_8dp(self):
-        self.assertEqual('{0:y}'.format(Duration(seconds=1)), '0.000000032y')
+        self.assertEqual('{0:y}'.format(Duration.SECOND), '0.000000032y')
 
     def test_format_default(self):
         self.assertEqual('{0}'.format(Duration(hours=2)), '2h')

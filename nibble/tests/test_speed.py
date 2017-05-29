@@ -182,7 +182,7 @@ class TestSpeed(unittest.TestCase):
 
     def test_format_invalid_info_unit(self):
         with self.assertRaises(TypeError):
-            '{0:foo}'.format(self._DURATION)
+            '{0:foo}'.format(Duration.SECOND)
 
     def test_format_separator_info_unit(self):
         speed = Speed(Information(1, Information.TERABITS))
