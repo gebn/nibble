@@ -140,6 +140,8 @@ class Speed(object):
 
 
 Speed.ZERO = Speed(Information.ZERO, Duration.SECOND)
+
+# Ethernet
 Speed.TEN_MEGABIT = Speed(Information(10, Information.MEGABITS),
                           Duration.SECOND)
 Speed.HUNDRED_MEGABIT = Speed.TEN_MEGABIT * 10
@@ -147,3 +149,28 @@ Speed.GIGABIT = Speed.HUNDRED_MEGABIT * 10
 Speed.TEN_GIGABIT = Speed.GIGABIT * 10
 Speed.FORTY_GIGABIT = Speed.TEN_GIGABIT * 4
 Speed.HUNDRED_GIGABIT = Speed.TEN_GIGABIT * 10
+
+# E-carrier
+Speed.E0 = Speed(Information(64, Information.KILOBITS), Duration.SECOND)
+Speed.E1 = Speed(Information(2.048, Information.MEGABITS), Duration.SECOND)
+Speed.E2 = Speed(Information(8.448, Information.MEGABITS), Duration.SECOND)
+Speed.E3 = Speed(Information(34.368, Information.MEGABITS), Duration.SECOND)
+Speed.E4 = Speed(Information(139.264, Information.MEGABITS), Duration.SECOND)
+Speed.E5 = Speed(Information(565.148, Information.MEGABITS), Duration.SECOND)
+
+# T-carrier signaling
+Speed.DS0 = Speed.E0
+Speed.DS1 = Speed(Information(1.544, Information.MEGABITS), Duration.SECOND)
+Speed.DS1C = Speed(Information(3.152, Information.MEGABITS), Duration.SECOND)
+Speed.DS2 = Speed(Information(6.312, Information.MEGABITS), Duration.SECOND)
+Speed.DS3 = Speed(Information(44.736, Information.MEGABITS), Duration.SECOND)
+Speed.DS4 = Speed(Information(274.176, Information.MEGABITS), Duration.SECOND)
+Speed.DS5 = Speed(Information(400.352, Information.MEGABITS), Duration.SECOND)
+
+# T-carrier lines
+Speed.T1 = Speed.DS1
+Speed.T1C = Speed.DS1C
+Speed.T2 = Speed.DS2
+Speed.T3 = Speed.DS3
+Speed.T4 = Speed.DS4
+Speed.T5 = Speed.DS5
