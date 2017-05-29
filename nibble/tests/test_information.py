@@ -211,7 +211,7 @@ class TestInformation(unittest.TestCase):
         self.assertEqual('{0}'.format(information), '1.21 TiB')
 
     def test_format_zero(self):
-        self.assertEqual('{0}'.format(Information.ZERO), '0 b')
+        self.assertEqual('{0}'.format(Information.ZERO), '0 B')
 
     def test_format_invalid_unit(self):
         with self.assertRaises(TypeError):

@@ -147,11 +147,10 @@ class Information(object):
         'yb': YOTTABITS
     }
 
-    BINARY_BITS = ['Yib', 'Zib', 'Eib', 'Pib', 'Tib', 'Gib', 'Mib', 'Kib', 'b']
-    BINARY_BYTES = ['YiB', 'ZiB', 'EiB', 'PiB', 'TiB', 'GiB', 'MiB', 'KiB', 'B',
-                    'b']
-    DECIMAL_BITS = ['Yb', 'Zb', 'Eb', 'Pb', 'Tb', 'Gb', 'Mb', 'Kb', 'b']
-    DECIMAL_BYTES = ['YB', 'ZB', 'EB', 'PB', 'TB', 'GB', 'MB', 'KB', 'B', 'b']
+    BINARY_BITS =  ['Yib', 'Zib', 'Eib', 'Pib', 'Tib', 'Gib', 'Mib', 'Kib', 'b']
+    BINARY_BYTES = ['YiB', 'ZiB', 'EiB', 'PiB', 'TiB', 'GiB', 'MiB', 'KiB', 'B']
+    DECIMAL_BITS = ['Yb',  'Zb',  'Eb',  'Pb',  'Tb',  'Gb',  'Mb',  'Kb',  'b']
+    DECIMAL_BYTES = ['YB', 'ZB',  'EB',  'PB',  'TB',  'GB',  'MB',  'KB',  'B']
 
     _CATEGORY_MAPS = {
         'bB': BINARY_BYTES,
