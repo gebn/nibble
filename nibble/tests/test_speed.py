@@ -10,8 +10,7 @@ from nibble.speed import Speed
 class TestSpeed(unittest.TestCase):
 
     _INFORMATION = Information(10)
-    _DURATION = Duration.SECOND
-    _SPEED = Speed(_INFORMATION, _DURATION)
+    _SPEED = Speed(_INFORMATION)
 
     def test_init_instant(self):
         with self.assertRaises(ValueError):
@@ -100,8 +99,7 @@ class TestSpeed(unittest.TestCase):
             _ = Speed.GIGABIT + 1
 
     def test_add(self):
-        self.assertEqual(Speed(Information(500, Information.MEGABITS),
-                               Duration(seconds=1)) +
+        self.assertEqual(Speed(Information(500, Information.MEGABITS)) +
                          Speed(Information(2.5, Information.GIGABITS),
                                Duration(seconds=5)),
                          Speed.GIGABIT)
@@ -187,7 +185,7 @@ class TestSpeed(unittest.TestCase):
             '{0:foo}'.format(self._DURATION)
 
     def test_format_separator_info_unit(self):
-        speed = Speed(Information(1, Information.TERABITS), Duration.SECOND)
+        speed = Speed(Information(1, Information.TERABITS))
         self.assertEqual('{0: Gb}'.format(speed), '1,000 Gb/s')
 
     def test_format_time_unit(self):

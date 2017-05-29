@@ -21,8 +21,7 @@ class TestInformation(unittest.TestCase):
         self.assertEqual(information, Information(20615843021))
 
     def test_at_speed(self):
-        speed = Speed(Information(100, Information.GIBIBYTES),
-                      Duration(seconds=1))
+        speed = Speed(Information(100, Information.GIBIBYTES))
         information = Information(10, Information.GIBIBYTES)
         self.assertEqual(information.at_speed(speed),
                          Duration(milliseconds=100))
@@ -30,8 +29,7 @@ class TestInformation(unittest.TestCase):
     def test_in_duration(self):
         information = Information(10, Information.MEGABYTES)
         self.assertEqual(information.in_duration(Duration(seconds=5)),
-                         Speed(Information(2, Information.MEGABYTES),
-                               Duration(seconds=1)))
+                         Speed(Information(2, Information.MEGABYTES)))
 
     def test_parse_rubbish(self):
         with self.assertRaises(ValueError):
