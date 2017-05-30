@@ -23,6 +23,35 @@ Installation
 
     $ pip install nibble
 
+Demo
+----
+
+The following snippet provides an example of Nibble's ability to format and manipulate quantities of information, durations and speeds.
+For explanations of what's going on, see each class's section below.
+
+.. code-block:: python
+
+    from nibble.information import Information
+    from nibble.duration import Duration
+    from nibble.speed import Speed
+
+
+    information = Information(123, Information.GIBIBITS)
+    print('{0}'.format(information))               # '15.38 GiB'
+    print('{0:GB}'.format(information))            # '16.51GB'
+    print('{0: GB}'.format(information))           # '16.51 GB'
+    print('{0:,.2f| Mb}'.format(information))      # '132,070.24 Mb'
+
+    speed = Speed(Information(20, Information.MEGABITS), Duration.SECOND)
+    print('{0}'.format(speed))                     # '2.38 MiB/s'
+    print('{0:Mb}'.format(speed))                  # '20Mb/s'
+    print('{0: Gb/w}'.format(speed))               # '12,096 Gb/w'
+    print(Speed.TEN_GIGABIT / 10
+          == Speed.HUNDRED_MEGABIT * 10
+          == Speed.GIGABIT)                        # True
+    print('{0: dB/y}'.format(Speed.TEN_GIGABIT))   # '39.42 PB/y'
+    print('{0:.2f| bB/mo}'.format(Speed.GIGABIT))  # '298.77 TiB/mo'
+
 Information
 -----------
 
@@ -226,32 +255,6 @@ The following class constants are provided for common speeds:
 +---------------------+--------------+
 | ``T5`` / ``DS5``    | 400.352 Mb/s |
 +---------------------+--------------+
-
-Demo
-----
-
-.. code-block:: python
-
-    from nibble.information import Information
-    from nibble.duration import Duration
-    from nibble.speed import Speed
-
-
-    information = Information(123, Information.GIBIBITS)
-    print('{0}'.format(information))               # '15.38 GiB'
-    print('{0:GB}'.format(information))            # '16.51GB'
-    print('{0: GB}'.format(information))           # '16.51 GB'
-    print('{0:,.2f| Mb}'.format(information))      # '132,070.24 Mb'
-
-    speed = Speed(Information(20, Information.MEGABITS), Duration.SECOND)
-    print('{0}'.format(speed))                     # '2.38 MiB/s'
-    print('{0:Mb}'.format(speed))                  # '20Mb/s'
-    print('{0: Gb/w}'.format(speed))               # '12,096 Gb/w'
-    print(Speed.TEN_GIGABIT / 10
-          == Speed.HUNDRED_MEGABIT * 10
-          == Speed.GIGABIT)                        # True
-    print('{0: dB/y}'.format(Speed.TEN_GIGABIT))   # '39.42 PB/y'
-    print('{0:.2f| bB/mo}'.format(Speed.GIGABIT))  # '298.77 TiB/mo'
 
 Issues
 ------
