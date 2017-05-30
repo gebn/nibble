@@ -27,7 +27,7 @@ Information
 -----------
 
 Nibble represents all quantities of information in terms of the smallest unit: bits.
-The syntax for formatting Information objects is:
+The syntax for formatting ``Information`` objects is:
 
 ::
 
@@ -35,7 +35,7 @@ The syntax for formatting Information objects is:
 
 - ``[number format|]`` is a valid floating point format specification followed by a pipe symbol so it can be distinguished from the rest of the format string
 - ``[ ]`` is an optional blank space separating the number from the unit symbol
-- ``[unit symbol or category]`` is either a single unit to represent the information in, e.g. Gb, or a category of units (see below), in which case Nibble will choose the most appropriate one.
+- ``[unit symbol or category]`` is either a single unit to represent the information in, e.g. Gb, or a category of units (see below), in which case Nibble will choose the most appropriate one
 
 The default format specification is ``'.2f| bB'``.
 
@@ -109,6 +109,46 @@ Why re-implement?
 Because that only goes down to microsecond precision, and lacks months and years.
 To make working with this class as easy as possible, a ``from_timedelta()`` method and ``timedelta`` property are provided - however bear in mind these will lose precision by virtue of working at a coarser level of granularity.
 
+The syntax for formatting ``Duration`` objects is:
+
+::
+
+   [number format|][ ][unit symbol]
+
+- ``[number format|]`` is a valid floating point format specification followed by a pipe symbol so it can be distinguished from the rest of the format string
+- ``[ ]`` is an optional blank space separating the number from the unit symbol
+- ``[unit symbol]`` is a time unit to represent the duration in (see below)
+
+By default, durations will be shown in the largest unit where the time period is greater or equal to 1 of that unit.
+For example, 1 minute would be shown as *1 m*. One nanosecond less would be shown as *60.00s*.
+
+Units
+~~~~~
+
++--------+--------------+
+| Symbol | Meaning      |
++========+==============+
+| ``ns`` | Nanoseconds  |
++--------+--------------+
+| ``us`` | Microseconds |
++--------+--------------+
+| ``ms`` | Milliseconds |
++--------+--------------+
+| ``s``  | Seconds      |
++--------+--------------+
+| ``m``  | Minutes      |
++--------+--------------+
+| ``h``  | Hours        |
++--------+--------------+
+| ``d``  | Days         |
++--------+--------------+
+| ``w``  | Weeks        |
++--------+--------------+
+| ``mo`` | Months       |
++--------+--------------+
+| ``y``  | Years        |
++--------+--------------+
+
 Shortcuts
 ~~~~~~~~~
 
@@ -126,6 +166,17 @@ Speed
 -----
 
 Speeds can be created using the standard constructor, or by calling ``.in_duration()` with a ``Duration`` on an ``Information`` object.
+
+The syntax for formatting ``Speed`` objects is:
+
+::
+
+   [number format|][ ][unit symbol or category][/time unit]
+
+- ``[number format|]`` is a valid floating point format specification followed by a pipe symbol so it can be distinguished from the rest of the format string
+- ``[ ]`` is an optional blank space separating the number from the unit symbol
+- ``[unit symbol or category]`` is either a single unit to represent the information in, e.g. Gb, or a category of units (see above)
+- ``[/time unit]`` is the time unit to show the quantity of information over
 
 The default format for speed is ``'.2f| bB/s'``.
 
