@@ -29,18 +29,49 @@ class Duration(object):
     MONTHS = HOURS * 730
     YEARS = MONTHS * 12
 
-    _UNITS = OrderedDict([
-        ('y', YEARS),
-        ('mo', MONTHS),
-        ('w', WEEKS),
-        ('d', DAYS),
-        ('h', HOURS),
-        ('m', MINUTES),
-        ('s', SECONDS),
-        ('ms', MILLISECONDS),
-        ('us', MICROSECONDS),
-        ('ns', NANOSECONDS),
-    ])
+    _SYMBOLS = {
+        'ns': NANOSECONDS,
+        'nanosecond': NANOSECONDS,
+        'nanoseconds': NANOSECONDS,
+        'us': MICROSECONDS,
+        'microsecond': MICROSECONDS,
+        'microseconds': MICROSECONDS,
+        'ms': MILLISECONDS,
+        'millisecond': MILLISECONDS,
+        'milliseconds': MILLISECONDS,
+        's': SECONDS,
+        'sec': SECONDS,
+        'secs': SECONDS,
+        'second': SECONDS,
+        'seconds': SECONDS,
+        'm': MINUTES,
+        'min': MINUTES,
+        'mins': MINUTES,
+        'minute': MINUTES,
+        'minutes': MINUTES,
+        'h': HOURS,
+        'hr': HOURS,
+        'hrs': HOURS,
+        'hour': HOURS,
+        'hours': HOURS,
+        'd': DAYS,
+        'day': DAYS,
+        'days': DAYS,
+        'w': WEEKS,
+        'wk': WEEKS,
+        'wks': WEEKS,
+        'week': WEEKS,
+        'weeks': WEEKS,
+        'mo': MONTHS,
+        'mos': MONTHS,
+        'month': MONTHS,
+        'months': MONTHS,
+        'y': YEARS,
+        'yr': YEARS,
+        'yrs': YEARS,
+        'year': YEARS,
+        'years': YEARS
+    }
 
     def __init__(self, nanoseconds=0, microseconds=0, milliseconds=0, seconds=0,
                  minutes=0, hours=0, days=0, weeks=0, months=0, years=0):
@@ -109,9 +140,9 @@ class Duration(object):
         :return: The number of nanoseconds in one of that unit.
         :raises ValueError: If `unit` is not recognised.
         """
-        if unit not in cls._UNITS:
+        if unit not in cls._SYMBOLS:
             raise ValueError('Unrecognised time unit \'{0}\''.format(unit))
-        return cls._UNITS[unit]
+        return cls._SYMBOLS[unit]
 
     @decorators.operator_same_class
     def __lt__(self, other):
@@ -187,7 +218,7 @@ class Duration(object):
         if not unit:
             # attempt to find the largest unit where the quantity is >= 1 of
             # that unit
-            for symbol, nanos in six.iteritems(self._UNITS):
+            for symbol, nanos in six.iteritems(self._MAGNITUDES):
                 if self.nanoseconds >= nanos:
                     unit = symbol
                     break
@@ -195,10 +226,10 @@ class Duration(object):
             # we should only get here if this object represents 0 nanoseconds
             if not unit:
                 unit = 'ns'
-        elif unit not in self._UNITS:
+        elif unit not in self._SYMBOLS:
             raise TypeError('Unrecognised time unit: {0}'.format(unit))
 
-        quantity = self.nanoseconds / self._UNITS[unit]
+        quantity = self.nanoseconds / self._SYMBOLS[unit]
 
         if not num_fmt:
             quantity = util.round_two_non_zero_dp(Decimal(quantity))
@@ -209,6 +240,12 @@ class Duration(object):
     def __str__(self):
         return '{0}'.format(self)
 
+
+# https://stackoverflow.com/a/13913933
+# noinspection PyProtectedMember
+Duration._MAGNITUDES = OrderedDict(
+    [(symbol, Duration._SYMBOLS[symbol])
+     for symbol in ['y', 'mo', 'w', 'd', 'h', 'm', 's', 'ms', 'us', 'ns']])
 
 Duration.ZERO = Duration(nanoseconds=0)
 Duration.SECOND = Duration(seconds=1)
