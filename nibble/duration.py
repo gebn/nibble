@@ -29,7 +29,7 @@ class Duration(object):
     MONTHS = HOURS * 730
     YEARS = MONTHS * 12
 
-    UNITS = OrderedDict([
+    _UNITS = OrderedDict([
         ('y', YEARS),
         ('mo', MONTHS),
         ('w', WEEKS),
@@ -98,6 +98,20 @@ class Duration(object):
         :return: A `Duration` representing the same duration.
         """
         return Duration(seconds=timedelta.total_seconds())
+
+    @classmethod
+    def unit_nanoseconds(cls, unit):
+        """
+        Retrieve the number of nanoseconds represented by a unit.
+        This allows other classes, e.g. `Speed`, to work with units of time.
+
+        :param unit: The unit of time, e.g. 'm'.
+        :return: The number of nanoseconds in one of that unit.
+        :raises ValueError: If `unit` is not recognised.
+        """
+        if unit not in cls._UNITS:
+            raise ValueError('Unrecognised time unit \'{0}\''.format(unit))
+        return cls._UNITS[unit]
 
     @decorators.operator_same_class
     def __lt__(self, other):
@@ -173,7 +187,7 @@ class Duration(object):
         if not unit:
             # attempt to find the largest unit where the quantity is >= 1 of
             # that unit
-            for symbol, nanos in six.iteritems(self.UNITS):
+            for symbol, nanos in six.iteritems(self._UNITS):
                 if self.nanoseconds >= nanos:
                     unit = symbol
                     break
@@ -181,10 +195,10 @@ class Duration(object):
             # we should only get here if this object represents 0 nanoseconds
             if not unit:
                 unit = 'ns'
-        elif unit not in self.UNITS:
+        elif unit not in self._UNITS:
             raise TypeError('Unrecognised time unit: {0}'.format(unit))
 
-        quantity = self.nanoseconds / self.UNITS[unit]
+        quantity = self.nanoseconds / self._UNITS[unit]
 
         if not num_fmt:
             quantity = util.round_two_non_zero_dp(Decimal(quantity))

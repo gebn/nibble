@@ -121,11 +121,12 @@ class Speed(object):
 
         if not time_unit:
             time_unit = 's'
-        # TODO extract to method so don't have to access UNITS directly
-        elif time_unit not in Duration.UNITS:
-            raise TypeError('Unrecognised time unit: {0}'.format(time_unit))
 
-        nanos = Duration.UNITS[time_unit]
+        try:
+            nanos = Duration.unit_nanoseconds(time_unit)
+        except ValueError as e:
+            raise TypeError(e)
+
         information = self.information * nanos / self.duration.nanoseconds
 
         if data_passed and not lhs:
