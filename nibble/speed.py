@@ -30,6 +30,20 @@ class Speed(object):
         self.information = information
         self.duration = duration
 
+    @classmethod
+    def from_quantity_units(cls, quantity, information_unit, duration_unit):
+        """
+        Initialise a new speed object from a quantity and unit string.
+
+        :param quantity: The number of the unit.
+        :param information_unit: The information part of the unit, e.g. 'GiB'.
+        :param duration_unit: The duration part of the unit, e.g. 'week'.
+        :return: A `Speed` object representing the quantity and unit.
+        """
+        information = Information.from_quantity_unit(quantity, information_unit)
+        duration = Duration.from_quantity_unit(1, duration_unit)
+        return Speed(information, duration)
+
     @property
     def _per_second(self):
         """

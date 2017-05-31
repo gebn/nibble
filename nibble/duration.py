@@ -101,6 +101,17 @@ class Duration(object):
                                      months * self.MONTHS +
                                      years * self.YEARS))
 
+    @classmethod
+    def from_quantity_unit(cls, quantity, unit):
+        """
+        Initialise a new duration object from a quantity and unit string.
+
+        :param quantity: The number of the unit.
+        :param unit: The unit as a string, e.g. 'm' or 'minutes'.
+        :return: A `Duration` object representing the quantity and unit.
+        """
+        return Duration(nanoseconds=quantity * cls._SYMBOLS[unit])
+
     @property
     def timedelta(self):
         """

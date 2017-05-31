@@ -44,6 +44,10 @@ class TestDuration(unittest.TestCase):
         self.assertEqual(Duration(years=1),
                          Duration(nanoseconds=10 ** 9 * 60 * 60 * 730 * 12))
 
+    def test_from_quantity_unit(self):
+        self.assertEqual(Duration.from_quantity_unit(1.35, 'hours'),
+                         Duration(hours=1.35))
+
     def test_total_seconds(self):
         self.assertEqual(Duration(seconds=1.5).total_seconds(),
                          datetime.timedelta(seconds=1.5).total_seconds())

@@ -16,6 +16,11 @@ class TestSpeed(unittest.TestCase):
         with self.assertRaises(ValueError):
             Speed(Information(1), Duration.ZERO)
 
+    def test_from_quantity_units(self):
+        self.assertEqual(Speed.from_quantity_units(1.35, 'kB', 'weeks'),
+                         Speed(Information(1.35, Information.KILOBYTES),
+                               Duration(weeks=1)))
+
     def test_per_second(self):
         self.assertEqual(Speed.FORTY_GIGABIT._per_second,
                          Information(40000, Information.MEGABITS))

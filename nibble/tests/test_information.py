@@ -20,6 +20,10 @@ class TestInformation(unittest.TestCase):
         self.assertIsInstance(information.bits, int)
         self.assertEqual(information, Information(20615843021))
 
+    def test_from_quantity_unit(self):
+        self.assertEqual(Information.from_quantity_unit(10.842, 'Gib'),
+                         Information(10.842, Information.GIBIBITS))
+
     def test_at_speed(self):
         speed = Speed(Information(100, Information.GIBIBYTES))
         information = Information(10, Information.GIBIBYTES)

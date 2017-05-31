@@ -211,6 +211,17 @@ class Information(object):
 
         self.bits = bits
 
+    @classmethod
+    def from_quantity_unit(cls, quantity, unit):
+        """
+        Initialise a new information object from a quantity and unit string.
+
+        :param quantity: The number of the unit.
+        :param unit: The unit as a string, e.g. 'MiB' or 'mebibytes'.
+        :return: An `Information` object representing the quantity and unit.
+        """
+        return Information(quantity, cls._SYMBOLS[unit])
+
     def at_speed(self, speed):
         """
         Find how long it would take to process this amount of data at a certain
