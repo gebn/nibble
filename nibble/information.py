@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, division
 from collections import OrderedDict
+from decimal import Decimal
 import re
 import math
 import six
 
-from nibble import decorators
+from nibble import util, decorators
 
 
 @decorators.python_2_div_compatible
@@ -362,7 +363,8 @@ class Information(object):
                 'Unrecognised information unit or category: {0}'.format(symbol))
 
         if not num_fmt:
-            num_fmt = ',.0f' if quantity.is_integer() else ',.2f'
+            quantity = util.round_two_non_zero_dp(Decimal(quantity))
+            num_fmt = ',f'
 
         return '{0:{1}}{2}{3}'.format(quantity, num_fmt, separator, unit)
 

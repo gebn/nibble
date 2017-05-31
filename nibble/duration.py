@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, division
 from collections import OrderedDict
+from decimal import Decimal
 import datetime
 import six
 
-from nibble import decorators
+from nibble import util, decorators
 
 
 @decorators.python_2_div_compatible
@@ -185,32 +186,9 @@ class Duration(object):
 
         quantity = self.nanoseconds / self.UNITS[unit]
 
-        # if the user did not provide a format for the number, default to up to
-        # two decimal places, but do not show any trailing 0s, e.g. 10.30 is
-        # 10.3
         if not num_fmt:
-            # TODO this needs fixing; 1 second shows '0y'
-            num_fmt = ',.0f' if quantity.is_integer() else ',.2f'
-
-            # 0.00001234 -> 0.000012
-            # 1.10000000 -> 1.1
-            # 1.01400000 -> 1.014
-            # 1.01000000 -> 1.01
-
-            # given a number, format it:
-            #  - with commas between the thousands
-            #  - as an integer if it is a whole number
-            #  - with two non-zero decimal places
-
-            # float's inaccuracy may not be helping you here at all
-
-            # decimal_places = 2
-            # while decimal_places > 0:
-            #     s = '{0:.{1}f}'.format(quantity, decimal_places)
-            #     if s[-1:] != '0':
-            #         break
-            #     decimal_places -= 1
-            # num_fmt = ',.{0}f'.format(decimal_places)
+            quantity = util.round_two_non_zero_dp(Decimal(quantity))
+            num_fmt = ',f'
 
         return '{0:{1}}{2}{3}'.format(quantity, num_fmt, separator, unit)
 

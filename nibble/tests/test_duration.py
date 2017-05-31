@@ -193,7 +193,7 @@ class TestDuration(unittest.TestCase):
         self.assertEqual('{0: }'.format(Duration(days=1)), '1 d')
 
     def test_format_force_unit_separator(self):
-        self.assertEqual('{0: m}'.format(Duration(seconds=90)), '1.50 m')
+        self.assertEqual('{0: m}'.format(Duration(seconds=90)), '1.5 m')
 
     def test_format_force_unit_no_separator(self):
         self.assertEqual('{0:s}'.format(Duration(minutes=1.5)), '90s')
@@ -205,13 +205,9 @@ class TestDuration(unittest.TestCase):
     def test_format_2dp(self):
         self.assertEqual('{0:y}'.format(Duration(days=3.65)), '0.01y')
 
-    # FIXME
-    @unittest.skip('Issue #1')
     def test_format_3dp(self):
         self.assertEqual('{0:y}'.format(Duration(hours=8.76581277)), '0.001y')
 
-    # FIXME
-    @unittest.skip('Issue #1')
     def test_format_8dp(self):
         self.assertEqual('{0:y}'.format(Duration.SECOND), '0.000000032y')
 
