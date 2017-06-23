@@ -21,11 +21,11 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 # INPUT = '10 gigabits/s in tebibytes/hour'  # type aliases
 # INPUT = '10.842Gib in bB'  # categories
 # INPUT = '10Gb per second in TiB per hour'  # 'per' and '/' as PER terminals
+# INPUT = '10Gb/s for 11 minutes'  # information : speed FOR duration
 
 # INPUT = '10Gb/s in GiB/s in KiB/s in MiB/s'  # FIXME - a conversion should produce a FormattedQuantity, which can be reformatted by subsequent conversions
 # TODO parser.parse(INPUT) should return a non-string that is converted into a string; this allows easier chaining internally, e.g. multiple conversions
 
-# INPUT = '10Gb/s for 11 minutes'  # FIXME
 # INPUT = '10Gb/s for 11 minutes at 5Gb/s'  # FIXME (nesting)
 # INPUT = '10Gb/s in MiB/2m'  # FIXME (valued duration time for speed_unit)
 
@@ -172,8 +172,8 @@ def p_information_duration_speed(p):
 
 def p_information_speed_duration(p):
     'information : speed FOR duration'
-    logger.debug('information = speed %s for duration %s', p[1], p[2])
-    p[0] = p[1].for_duration(p[2])
+    logger.debug('information = speed %s for duration %s', p[1], p[3])
+    p[0] = p[1].for_duration(p[3])
 
 
 def p_information_conversion(p):
