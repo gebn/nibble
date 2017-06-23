@@ -22,6 +22,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 # INPUT = '10.842Gib in bB'  # categories
 # INPUT = '10Gb per second in TiB per hour'  # 'per' and '/' as PER terminals
 # INPUT = '10Gb/s for 11 minutes'  # information : speed FOR duration
+# INPUT = '11 minutes at 10Gb/s'  # information : duration AT speed
 
 # INPUT = '10Gb/s in GiB/s in KiB/s in MiB/s'  # FIXME - a conversion should produce a FormattedQuantity, which can be reformatted by subsequent conversions
 # TODO parser.parse(INPUT) should return a non-string that is converted into a string; this allows easier chaining internally, e.g. multiple conversions
@@ -166,8 +167,8 @@ def p_information_constructor(p):
 
 def p_information_duration_speed(p):
     'information : duration AT speed'
-    logger.debug('information = duration %s at speed %s', p[1], p[2])
-    p[0] = p[1].at_speed(p[2])
+    logger.debug('information = duration %s at speed %s', p[1], p[3])
+    p[0] = p[3].for_duration(p[1])
 
 
 def p_information_speed_duration(p):
