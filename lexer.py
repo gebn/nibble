@@ -262,8 +262,9 @@ def p_speed_unit(p):
 def p_error(p):
     if not p:
         raise ValueError('Unable to parse expression')
-    raise ValueError('Unable to parse expression: unexpected token \'{0}\' at '
-                     'position {1}'.format(p.value, p.lexpos))
+    raise ValueError(
+        'Unable to parse expression: unexpected {0.type} token with value '
+        '\'{0.value}\' after character {0.lexpos}'.format(p))
 
 # Build the parser
 parser = yacc.yacc()
