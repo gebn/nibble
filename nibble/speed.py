@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, division
+import re
 import six
 
 from nibble.information import Information
@@ -14,6 +15,9 @@ class Speed(object):
     """
     Represents a quantity of information processed over a period of time.
     """
+
+    # matches a duration with a unit
+    DURATION_REGEX = re.compile(r'^(\d+\.?\d*)\s*(\w+)')
 
     def __init__(self, information, duration=Duration.SECOND):
         """
@@ -127,29 +131,41 @@ class Speed(object):
     @decorators.python_2_format_compatible
     def __format__(self, format_spec):
         # Defaults to <the most appropriate binary bytes unit> per second
-        # [number format|][ ][unit symbol or category][/time unit]
+        # [number format|][ ][unit symbol or category][/[quantity][ ]time unit]
 
-        lhs, _, time_unit = format_spec.partition('/')
+        lhs, _, time = format_spec.partition('/')
 
-        data_passed = time_unit != ''
+        if time:
+            match = self.DURATION_REGEX.match(time)
+            if match:
+                # quantity provided
+                quantity = float(match.group(1))
+                if quantity.is_integer():
+                    quantity = int(quantity)
+                unit = match.group(2)
+            else:
+                # no quantity
+                quantity = 1
+                unit = time
 
-        if not time_unit:
-            time_unit = 's'
+            if not lhs:
+                # this is a workaround to maintain the separator '/m' should
+                # result in a separator not being printed, but '' is passed to
+                # Information as the lhs, so it goes to default formatting
+                lhs = 'bB'
+        else:
+            quantity = 1
+            unit = 's'
 
         try:
-            nanos = Duration.unit_nanoseconds(time_unit)
+            nanos = quantity * Duration.unit_nanoseconds(unit)
         except ValueError as e:
             raise TypeError(e)
 
         information = self.information * nanos / self.duration.nanoseconds
 
-        if data_passed and not lhs:
-            # this is a workaround to maintain the separator '/m' should result
-            # in a separator not being printed, but '' is passed to Information
-            # as the lhs, so it goes to default formatting
-            lhs = 'bB'
-
-        return '{0:{1}}/{2}'.format(information, lhs, time_unit)
+        time_fmt = unit if quantity == 1 else '{0}{1}'.format(quantity, unit)
+        return '{0:{1}}/{2}'.format(information, lhs, time_fmt)
 
     def __str__(self):
         return '{0}'.format(self)

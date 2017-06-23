@@ -25,11 +25,12 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 # INPUT = '11 minutes at 10Gb/s'  # information : duration AT speed
 # INPUT = '10Gb/s for 11 minutes at 5Gb/s'  # nesting
 # INPUT = '481MB at 15Mb/s in s'  # nesting
+# INPUT = '50Gb/5s'  # non-one speed duration
+# INPUT = '50Gb/s for minute'  # 1 is implicit
+# INPUT = '10Gb/s in MiB/2m'  # valued duration time for speed_unit
 
 # INPUT = '10Gb/s in GiB/s in KiB/s in MiB/s'  # FIXME - a conversion should produce a FormattedQuantity, which can be reformatted by subsequent conversions
 # TODO parser.parse(INPUT) should return a non-string that is converted into a string; this allows easier chaining internally, e.g. multiple conversions
-
-# INPUT = '10Gb/s in MiB/2m'  # FIXME (valued duration time for speed_unit)
 
 # INPUT = '481MB at 15Mb/s'  # TODO print durations in terms of years, months, weeks, days etc. by default "4 minutes 16.53 seconds"
 
@@ -121,6 +122,7 @@ precedence = (
     # lowest
     ('left', 'IN'),  # only do conversions at the end
     ('left', 'AT', 'FOR'),  # do calculations
+    ('nonassoc', 'PER'),  # 10Gb/3 h 3 m
     ('left', 'DURATION_UNIT')  # 3 h 3 m is a single quantity
     # highest
 )
@@ -185,20 +187,27 @@ def p_information_conversion(p):
 
 
 """
-duration : NUMBER DURATION_UNIT duration
+duration : DURATION_UNIT
          | NUMBER DURATION_UNIT
+         | NUMBER DURATION_UNIT duration
          | information AT speed
          | duration IN DURATION_UNIT
 """
 
 
-def p_duration_constructor_base(p):
+def p_duration_duration_unit(p):
+    'duration : DURATION_UNIT'
+    logger.debug('duration = 1 of duration unit %s', p[1])
+    p[0] = Duration.from_quantity_unit(1, p[1])
+
+
+def p_duration_number_duration_unit(p):
     'duration : NUMBER DURATION_UNIT'
     logger.debug('duration = number %s, duration unit %s', p[1], p[2])
     p[0] = Duration.from_quantity_unit(p[1], p[2])
 
 
-def p_duration_constructor_recursive(p):
+def p_duration_number_duration_unit_duration(p):
     'duration : NUMBER DURATION_UNIT duration'
     logger.debug(
         'duration = number %s, duration unit %s, duration %s', p[1], p[2], p[3])
@@ -228,8 +237,9 @@ speed : NUMBER speed_unit
 def p_speed_constructor(p):
     'speed : NUMBER speed_unit'
     logger.debug('speed = number %s, speed unit %s', p[1], p[2])
-    information_unit, duration_unit = p[2]
-    p[0] = Speed.from_quantity_units(p[1], information_unit, duration_unit)
+    information_unit, duration = p[2]
+    information = Information.from_quantity_unit(p[1], information_unit)
+    p[0] = information.in_duration(duration)
 
 
 def p_speed_information_duration(p):
@@ -241,20 +251,20 @@ def p_speed_information_duration(p):
 def p_speed_conversion(p):
     'speed : speed IN speed_unit'
     logger.debug('speed = speed %s in speed unit %s', p[1], p[3])
-    information_unit, duration_unit = p[3]
+    information_unit, duration = p[3]
     p[0] = '{0: {1}}'.format(p[1],
-                             '{0}/{1}'.format(information_unit, duration_unit))
+                             '{0}/{1}'.format(information_unit, duration))
 
 
 """
-speed_unit : INFORMATION_UNIT PER DURATION_UNIT
+speed_unit : INFORMATION_UNIT PER duration
 """
 
 
 def p_speed_unit(p):
-    'speed_unit : INFORMATION_UNIT PER DURATION_UNIT'
+    'speed_unit : INFORMATION_UNIT PER duration'
     logger.debug(
-        'speed unit = information unit %s per duration unit %s', p[1], p[3])
+        'speed unit = information unit %s per duration %s', p[1], p[3])
     p[0] = (p[1], p[3])
 
 
