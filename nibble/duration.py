@@ -155,6 +155,11 @@ class Duration(object):
             remaining -= quantity * nanos
             if not remaining:  # simple optimisation
                 break
+
+        if not chunks:
+            # only the case if representing Duration.ZERO
+            return '0 nanoseconds'
+
         return ' '.join(chunks)
 
     @classmethod
