@@ -291,6 +291,7 @@ class Duration(object):
 Duration._MAGNITUDES = OrderedDict(
     [(symbol, Duration._SYMBOLS[symbol])
      for symbol in ['y', 'mo', 'w', 'd', 'h', 'm', 's', 'ms', 'us', 'ns']])
+# noinspection PyProtectedMember
 Duration._HUMAN_MAGNITUDES = OrderedDict(
     [(symbol, Duration._SYMBOLS[symbol])
      for symbol in ['year', 'month', 'week', 'day', 'hour', 'minute', 'second',
