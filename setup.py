@@ -36,7 +36,8 @@ setup(
     ],
     test_suite='nose.collector',
     tests_require=[
-        'nose'
+        'nose',
+        'mock'
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
