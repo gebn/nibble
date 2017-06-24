@@ -34,7 +34,7 @@ class Duration(object):
         'ns': NANOSECONDS,
         'nanosecond': NANOSECONDS,
         'nanoseconds': NANOSECONDS,
-        'us': MICROSECONDS,
+        'us': MICROSECONDS,  # because who's going to type μ
         'microsecond': MICROSECONDS,
         'microseconds': MICROSECONDS,
         'ms': MILLISECONDS,
