@@ -43,6 +43,10 @@ class TestLexer(unittest.TestCase):
         with self.assertRaises(LexingError):
             next(self.lexer.lex('sdfgs foo bar'))
 
+    def test_invalid_middle(self):
+        with self.assertRaises(LexingError):
+            list(self.lexer.lex('12MiB/s in 12z in GiB/d'))
+
     def test_at(self):
         self.assert_lex_produces('at', [self.make_tok('AT', 'at', 1, 0)])
 
