@@ -196,6 +196,9 @@ class TestDuration(unittest.TestCase):
     def test_format_separator(self):
         self.assertEqual('{0: }'.format(Duration(days=1)), '1 d')
 
+    def test_Format_separator_zero(self):
+        self.assertEqual('{0: }'.format(Duration.ZERO), '0 ns')
+
     def test_format_force_unit_separator(self):
         self.assertEqual('{0: m}'.format(Duration(seconds=90)), '1.5 m')
 
