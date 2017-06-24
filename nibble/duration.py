@@ -227,6 +227,9 @@ class Duration(object):
 
         # if we have a unit, ensure it's valid
         if not unit:
+            # default; will only be used if this object equals Duration.ZERO
+            unit = 'ns'
+
             # attempt to find the largest unit where the quantity is >= 1 of
             # that unit
             for symbol, nanos in six.iteritems(self._MAGNITUDES):
@@ -234,9 +237,6 @@ class Duration(object):
                     unit = symbol
                     break
 
-            # we should only get here if this object represents 0 nanoseconds
-            if not unit:
-                unit = 'ns'
         elif unit not in self._SYMBOLS:
             raise TypeError('Unrecognised time unit: {0}'.format(unit))
 
