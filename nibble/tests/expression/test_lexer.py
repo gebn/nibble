@@ -43,6 +43,10 @@ class TestLexer(unittest.TestCase):
         with self.assertRaises(LexingError):
             next(self.lexer.lex('sdfgs foo bar'))
 
+    def test_garbage(self):
+        with self.assertRaises(LexingError):
+            next(self.lexer.lex(' ̇ ̈ ̉ ̊ ̋ ̌ ̍̒'))
+
     def test_invalid_middle(self):
         with self.assertRaises(LexingError):
             list(self.lexer.lex('12MiB/s in 12z in GiB/d'))
