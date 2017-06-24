@@ -2,3 +2,6 @@
 branch = True
 source =
     nibble
+omit =
+    # this is created during execution of the test suite in Travis
+    nibble/expression/parsetab.py
