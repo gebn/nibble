@@ -27,7 +27,8 @@ class TestLexer(unittest.TestCase):
     def assert_lex_produces(self, input, tokens):
         result = list(self.lexer.lex(input))
         self.assertEqual(len(result), len(tokens),
-                         'Token streams are of different length')
+                         'Token streams are of different length ({0} and '
+                         '{1})'.format(len(result), len(tokens)))
         for expected, actual in zip(tokens, result):
             self.assert_tok_equal(expected, actual)
 
