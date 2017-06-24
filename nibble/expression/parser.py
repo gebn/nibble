@@ -164,12 +164,6 @@ class Parser(object):
         """
         Initialise a new parser.
         """
-        self._build()
-
-    def _build(self):
-        """
-        Build the parser.
-        """
         # TODO how can you print the list of tokens when debugging?
         # TODO look into optimize and picklefile options
         self.parser = yacc.yacc(module=self,

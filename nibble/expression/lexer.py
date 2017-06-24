@@ -77,12 +77,6 @@ class Lexer(object):
         """
         Initialise a new lexer.
         """
-        self._build()
-
-    def _build(self):
-        """
-        Build the lexer. 
-        """
         # TODO look into optimized mode with a lextab.py file
         #      http://www.dabeaz.com/ply/ply.html#ply_nn15
         self.lexer = lex.lex(module=self)
