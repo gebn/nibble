@@ -172,7 +172,9 @@ class Parser(object):
         """
         # TODO how can you print the list of tokens when debugging?
         # TODO look into optimize and picklefile options
-        self.parser = yacc.yacc(module=self)
+        self.parser = yacc.yacc(module=self,
+                                tabmodule='parsing_table',
+                                debug=False)
 
     def parse(self, string, lexer=None):
         """
