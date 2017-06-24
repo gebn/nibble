@@ -148,11 +148,13 @@ class Duration(object):
             if quantity < 1:
                 # skip
                 continue
+
+            suffix = '' if quantity == 1 else 's'
+            chunks.append('{0} {1}{2}'.format(quantity, unit, suffix))
+
             remaining -= quantity * nanos
             if not remaining:  # simple optimisation
                 break
-            suffix = '' if quantity == 1 else 's'
-            chunks.append('{0} {1}{2}'.format(quantity, unit, suffix))
         return ' '.join(chunks)
 
     @classmethod
