@@ -14,7 +14,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 
 # Need 1 test per input - info in duration, speed for duration etc. both with and without conversion
-# INPUT = '17.3GB at 688.3kB/s'
+# INPUT = '17.3GB at 688.3kB/s'  # printing durations in verbose form (years, months, weeks etc.)
 # INPUT = '1Gb/s in TiB/day'  # bare conversion
 # INPUT = '22 MiB in 3h in GiB/h'  # calculation and conversion
 # INPUT = '22 MiB in 3h 30m in GiB/h'  # compound duration
@@ -31,8 +31,6 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 # INPUT = '10Gb/s in GiB/s in KiB/s in MiB/s'  # FIXME - a conversion should produce a FormattedQuantity, which can be reformatted by subsequent conversions
 # TODO parser.parse(INPUT) should return a non-string that is converted into a string; this allows easier chaining internally, e.g. multiple conversions
-
-# INPUT = '481MB at 15Mb/s'  # TODO print durations in terms of years, months, weeks, days etc. by default "4 minutes 16.53 seconds"
 
 # INPUT = '10Gb/s in /w'  # PONDERING (grammar too strict - look back at valid `format_spec`s)
 # INPUT = '10Gb/s in MiB'  # PONDERING (same reason as above)
