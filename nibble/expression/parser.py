@@ -174,7 +174,8 @@ class Parser(object):
         # TODO look into optimize and picklefile options
         self.parser = yacc.yacc(module=self,
                                 tabmodule='parsing_table',
-                                debug=False)
+                                debug=logger.getEffectiveLevel() ==
+                                logging.DEBUG)
 
     def parse(self, string, lexer=None):
         """
