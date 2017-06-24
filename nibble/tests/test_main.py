@@ -1,17 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import unittest
+import mock
 import sys
 import os
 import contextlib
 import six
 
 from nibble import __main__ as main
-
-try:
-    import mock
-except ImportError:
-    import unittest.mock as mock
 
 
 @contextlib.contextmanager
