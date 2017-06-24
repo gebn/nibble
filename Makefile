@@ -6,3 +6,4 @@ clean:
 	rm -rf build
 	rm -rf .eggs
 	rm -f .coverage
+	rm -f nibble/expression/{parser.out,parsetab.py,parsetab.pyc}

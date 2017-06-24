@@ -193,10 +193,18 @@ class TestSpeed(unittest.TestCase):
         speed = Speed(Information(1, Information.TERABITS))
         self.assertEqual('{0: Gb}'.format(speed), '1,000 Gb/s')
 
-    def test_format_time_unit(self):
+    def test_format_time_unit_singular(self):
         # use per minute instead of seconds, and work out the quantity in binary
         # bytes
         self.assertEqual('{0:/m}'.format(Speed.GIGABIT), '6.98GiB/m')
+
+    def test_format_time_unit_integral(self):
+        self.assertEqual('{0:/5m}'.format(Speed.TEN_GIGABIT),
+                         '349.25GiB/5m')
+
+    def test_format_time_unit_fractional(self):
+        self.assertEqual('{0:/2.3d}'.format(Speed.TEN_MEGABIT),
+                         '231.34GiB/2.3d')
 
     def test_format_separator_time_unit(self):
         self.assertEqual('{0: /m}'.format(Speed.GIGABIT), '6.98 GiB/m')

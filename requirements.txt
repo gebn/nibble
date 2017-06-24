@@ -1,3 +1,5 @@
+mock
 coverage
 coveralls
 six>=1.9.0
+PLY>=3.6

@@ -3,6 +3,7 @@ from __future__ import unicode_literals, division
 from collections import OrderedDict
 from decimal import Decimal
 import datetime
+import math
 import six
 
 from nibble import util, decorators
@@ -33,7 +34,7 @@ class Duration(object):
         'ns': NANOSECONDS,
         'nanosecond': NANOSECONDS,
         'nanoseconds': NANOSECONDS,
-        'us': MICROSECONDS,
+        'us': MICROSECONDS,  # because who's going to type μ
         'microsecond': MICROSECONDS,
         'microseconds': MICROSECONDS,
         'ms': MILLISECONDS,
@@ -112,6 +113,16 @@ class Duration(object):
         """
         return Duration(nanoseconds=quantity * cls._SYMBOLS[unit])
 
+    @classmethod
+    def is_valid_symbol(cls, symbol):
+        """
+        Find whether a symbol is a valid unit of time.
+
+        :param symbol: The symbol to check.
+        :return: True if the symbol is a valid unit, false otherwise.
+        """
+        return symbol in cls._SYMBOLS
+
     @property
     def timedelta(self):
         """
@@ -130,6 +141,36 @@ class Duration(object):
         :return: The number of seconds represented by this duration, as a float.
         """
         return self.nanoseconds / 10 ** 9
+
+    def human_readable(self):
+        """
+        Format this duration as a human-readable string of units, e.g.
+        "1y 2mo", or "3w 6d 45m 20s". This is the default when no specification
+        is supplied when `.format()`ing this object. This is not a property as
+        there is a non-trivial amount of computation involved.
+
+        :return: A human-readable representation of this object.
+        """
+        remaining = self.nanoseconds
+        chunks = []
+        for unit, nanos in six.iteritems(self._HUMAN_MAGNITUDES):
+            quantity = int(math.floor(remaining / nanos))
+            if quantity < 1:
+                # skip
+                continue
+
+            suffix = '' if quantity == 1 else 's'
+            chunks.append('{0} {1}{2}'.format(quantity, unit, suffix))
+
+            remaining -= quantity * nanos
+            if not remaining:  # simple optimisation
+                break
+
+        if not chunks:
+            # only the case if representing Duration.ZERO
+            return '0 nanoseconds'
+
+        return ' '.join(chunks)
 
     @classmethod
     def from_timedelta(cls, timedelta):
@@ -214,6 +255,9 @@ class Duration(object):
 
         # [number format|][ ][unit symbol]
 
+        if not format_spec:
+            return self.human_readable()
+
         num_fmt, _, unit = format_spec.rpartition('|')
 
         # we want to be able to support unit = ' ' so the user can choose
@@ -257,6 +301,11 @@ class Duration(object):
 Duration._MAGNITUDES = OrderedDict(
     [(symbol, Duration._SYMBOLS[symbol])
      for symbol in ['y', 'mo', 'w', 'd', 'h', 'm', 's', 'ms', 'us', 'ns']])
+# noinspection PyProtectedMember
+Duration._HUMAN_MAGNITUDES = OrderedDict(
+    [(symbol, Duration._SYMBOLS[symbol])
+     for symbol in ['year', 'month', 'week', 'day', 'hour', 'minute', 'second',
+                    'millisecond', 'microsecond', 'nanosecond']])
 
 Duration.ZERO = Duration(nanoseconds=0)
 Duration.SECOND = Duration(seconds=1)

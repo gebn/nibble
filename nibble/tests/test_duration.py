@@ -48,6 +48,12 @@ class TestDuration(unittest.TestCase):
         self.assertEqual(Duration.from_quantity_unit(1.35, 'hours'),
                          Duration(hours=1.35))
 
+    def test_is_valid_symbol_true(self):
+        self.assertTrue(Duration.is_valid_symbol('d'))
+
+    def test_is_valid_symbol_false(self):
+        self.assertFalse(Duration.is_valid_symbol('dz'))
+
     def test_total_seconds(self):
         self.assertEqual(Duration(seconds=1.5).total_seconds(),
                          datetime.timedelta(seconds=1.5).total_seconds())
@@ -219,41 +225,41 @@ class TestDuration(unittest.TestCase):
         self.assertEqual('{0:y}'.format(Duration.SECOND), '0.000000032y')
 
     def test_format_default(self):
-        self.assertEqual('{0}'.format(Duration(hours=2)), '2h')
+        self.assertEqual('{0}'.format(Duration(hours=2)), '2 hours')
 
     def test_format_zero(self):
-        self.assertEqual('{0}'.format(Duration.ZERO), '0ns')
+        self.assertEqual('{0}'.format(Duration.ZERO), '0 nanoseconds')
 
     def test_repr(self):
         self.assertEqual(repr(Duration(minutes=1, seconds=0.1)),
                          '<Duration(60100000000)>')
 
     def test_str_nanoseconds(self):
-        self.assertEqual(str(Duration(microseconds=0.015)), '15ns')
+        self.assertEqual(str(Duration(microseconds=0.015)), '15 nanoseconds')
 
     def test_str_microseconds(self):
-        self.assertEqual(str(Duration(milliseconds=0.039)), '39us')
+        self.assertEqual(str(Duration(milliseconds=0.039)), '39 microseconds')
 
     def test_str_milliseconds(self):
-        self.assertEqual(str(Duration(microseconds=13000)), '13ms')
+        self.assertEqual(str(Duration(microseconds=13000)), '13 milliseconds')
 
     def test_str_s(self):
-        self.assertEqual(str(Duration(minutes=0.5)), '30s')
+        self.assertEqual(str(Duration(minutes=0.5)), '30 seconds')
 
     def test_str_m(self):
-        self.assertEqual(str(Duration(hours=0.25)), '15m')
+        self.assertEqual(str(Duration(hours=0.25)), '15 minutes')
 
     def test_str_h(self):
-        self.assertEqual(str(Duration(minutes=120)), '2h')
+        self.assertEqual(str(Duration(minutes=120)), '2 hours')
 
     def test_str_d(self):
-        self.assertEqual(str(Duration(hours=48)), '2d')
+        self.assertEqual(str(Duration(hours=48)), '2 days')
 
     def test_str_w(self):
-        self.assertEqual(str(Duration(days=14)), '2w')
+        self.assertEqual(str(Duration(days=14)), '2 weeks')
 
     def test_str_mo(self):
-        self.assertEqual(str(Duration(years=1) / 12), '1mo')
+        self.assertEqual(str(Duration(years=1) / 12), '1 month')
 
     def test_str_y(self):
-        self.assertEqual(str(Duration(months=24)), '2y')
+        self.assertEqual(str(Duration(months=24)), '2 years')

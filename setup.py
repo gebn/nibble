@@ -31,11 +31,13 @@ setup(
     packages=find_packages(),
     zip_safe=True,
     install_requires=[
-        'six>=1.9.0'
+        'six>=1.9.0',
+        'PLY>=3.6'
     ],
     test_suite='nose.collector',
     tests_require=[
-        'nose'
+        'nose',
+        'mock'
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
