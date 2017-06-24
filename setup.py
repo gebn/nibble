@@ -3,8 +3,6 @@ from __future__ import unicode_literals
 from setuptools import setup, find_packages
 import codecs
 
-import nibble
-
 
 def _read_file(name, encoding='utf-8'):
     """
@@ -20,7 +18,7 @@ def _read_file(name, encoding='utf-8'):
 
 setup(
     name='nibble',
-    version=nibble.__version__,
+    version='0.1.0',
     description='Speed, distance and time calculations around quantities of '
                 'digital information.',
     long_description=_read_file('README.rst'),

@@ -3,9 +3,7 @@ from __future__ import unicode_literals
 import logging
 from ply import yacc
 
-from nibble.information import Information
-from nibble.duration import Duration
-from nibble.expression.lexer import Lexer
+from nibble import Information, Duration, Lexer
 
 
 logger = logging.getLogger(__name__)

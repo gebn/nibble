@@ -31,9 +31,7 @@ For explanations of what's going on, see each class's section below.
 
 .. code-block:: python
 
-    from nibble.information import Information
-    from nibble.duration import Duration
-    from nibble.speed import Speed
+    from nibble import Information, Duration, Speed
 
 
     information = Information(123, Information.GIBIBITS)

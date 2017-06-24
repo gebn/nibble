@@ -6,9 +6,7 @@ import argparse
 import logging
 
 import nibble
-from nibble import util
-from nibble.expression.lexer import LexingError
-from nibble.expression.parser import Parser, ParsingError
+from nibble import util, LexingError, Parser, ParsingError
 
 logger = logging.getLogger(__name__)
 

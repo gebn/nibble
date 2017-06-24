@@ -2,10 +2,7 @@
 from __future__ import unicode_literals
 import unittest
 
-from nibble.information import Information
-from nibble.duration import Duration
-from nibble.speed import Speed
-from nibble.expression.parser import Parser, ParsingError
+from nibble import Information, Duration, Speed, Parser, ParsingError
 
 
 class TestParser(unittest.TestCase):

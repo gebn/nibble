@@ -250,7 +250,7 @@ class Information(object):
         :param speed: The speed of processing.
         :return: The time taken as a `datetime.timedelta`.
         """
-        from nibble.duration import Duration
+        from nibble import Duration
         scale = self.bits / speed.information.bits
         return Duration(seconds=speed.duration.total_seconds() * scale)
 
@@ -262,7 +262,7 @@ class Information(object):
         :param duration: The time taken to process this amount of data.
         :return: The speed of the processing.
         """
-        from nibble.speed import Speed
+        from nibble import Speed
         return Speed(self, duration)
 
     @classmethod

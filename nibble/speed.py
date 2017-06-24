@@ -3,9 +3,7 @@ from __future__ import unicode_literals, division
 import re
 import six
 
-from nibble.information import Information
-from nibble.duration import Duration
-from nibble import decorators
+from nibble import decorators, Information, Duration
 
 
 @decorators.python_2_div_compatible

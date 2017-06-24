@@ -2,8 +2,7 @@
 from __future__ import unicode_literals
 from ply import lex
 
-from nibble.information import Information
-from nibble.duration import Duration
+from nibble import Information, Duration
 
 
 class LexingError(Exception):

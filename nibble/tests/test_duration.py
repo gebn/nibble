@@ -3,7 +3,7 @@ from __future__ import unicode_literals, division
 import unittest
 import datetime
 
-from nibble.duration import Duration
+from nibble import Duration
 
 
 class TestDuration(unittest.TestCase):

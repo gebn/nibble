@@ -2,9 +2,7 @@
 from __future__ import unicode_literals, division
 import unittest
 
-from nibble.information import Information
-from nibble.duration import Duration
-from nibble.speed import Speed
+from nibble import Information, Duration, Speed
 
 
 class TestSpeed(unittest.TestCase):

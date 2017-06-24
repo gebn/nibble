@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import unittest
-
-from nibble.expression.lexer import Lexer, LexingError
 from ply.lex import LexToken
+
+from nibble import Lexer, LexingError
 
 
 class TestLexer(unittest.TestCase):

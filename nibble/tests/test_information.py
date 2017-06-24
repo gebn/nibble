@@ -4,9 +4,7 @@ import unittest
 from collections import OrderedDict
 import six
 
-from nibble.information import Information
-from nibble.duration import Duration
-from nibble.speed import Speed
+from nibble import Information, Duration, Speed
 
 
 class TestInformation(unittest.TestCase):
