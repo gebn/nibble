@@ -5,3 +5,8 @@ source =
 omit =
     # this is created during execution of the test suite in Travis
     nibble/expression/parsing_table.py
+
+[report]
+exclude_lines =
+    # non-runnable code
+    if __name__ == .__main__.:
