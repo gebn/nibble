@@ -24,6 +24,18 @@ class TestInformation(unittest.TestCase):
         self.assertEqual(Information.from_quantity_unit(10.842, 'Gib'),
                          Information(10.842, Information.GIBIBITS))
 
+    def test_is_valid_symbol_true(self):
+        self.assertTrue(Information.is_valid_symbol('GiB'))
+
+    def test_is_valid_symbol_false(self):
+        self.assertFalse(Information.is_valid_symbol('TiBz'))
+
+    def test_is_valid_category_true(self):
+        self.assertTrue(Information.is_valid_category('bB'))
+
+    def test_is_valid_category_false(self):
+        self.assertFalse(Information.is_valid_category('dba'))
+
     def test_at_speed(self):
         speed = Speed(Information(100, Information.GIBIBYTES))
         information = Information(10, Information.GIBIBYTES)
