@@ -48,6 +48,12 @@ class TestDuration(unittest.TestCase):
         self.assertEqual(Duration.from_quantity_unit(1.35, 'hours'),
                          Duration(hours=1.35))
 
+    def test_is_valid_symbol_true(self):
+        self.assertTrue(Duration.is_valid_symbol('d'))
+
+    def test_is_valid_symbol_false(self):
+        self.assertFalse(Duration.is_valid_symbol('dz'))
+
     def test_total_seconds(self):
         self.assertEqual(Duration(seconds=1.5).total_seconds(),
                          datetime.timedelta(seconds=1.5).total_seconds())
