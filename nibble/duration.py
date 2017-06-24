@@ -113,6 +113,16 @@ class Duration(object):
         """
         return Duration(nanoseconds=quantity * cls._SYMBOLS[unit])
 
+    @classmethod
+    def is_valid_symbol(cls, symbol):
+        """
+        Find whether a symbol is a valid unit of time.
+
+        :param symbol: The symbol to check.
+        :return: True if the symbol is a valid unit, false otherwise.
+        """
+        return symbol in cls._SYMBOLS
+
     @property
     def timedelta(self):
         """

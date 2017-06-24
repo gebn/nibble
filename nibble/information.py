@@ -222,6 +222,26 @@ class Information(object):
         """
         return Information(quantity, cls._SYMBOLS[unit])
 
+    @classmethod
+    def is_valid_symbol(cls, symbol):
+        """
+        Find whether a symbol is a valid unit of information.
+
+        :param symbol: The symbol to check.
+        :return: True if the symbol is a valid unit, false otherwise.
+        """
+        return symbol in cls._SYMBOLS
+
+    @classmethod
+    def is_valid_category(cls, category):
+        """
+        Find whether a category is valid.
+
+        :param category: The category to check.
+        :return: True if the category is valid, false otherwise.
+        """
+        return category in cls._CATEGORY_MAPS
+
     def at_speed(self, speed):
         """
         Find how long it would take to process this amount of data at a certain

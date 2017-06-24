@@ -2,11 +2,11 @@
 from __future__ import unicode_literals, print_function
 import sys
 import logging
-from ply import lex, yacc
+from ply import yacc
 
 from nibble.information import Information
 from nibble.duration import Duration
-from nibble.speed import Speed
+from nibble.expression.lexer import Lexer, LexingError
 
 
 logger = logging.getLogger(__name__)
@@ -37,84 +37,8 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 INPUT = ' '.join(sys.argv[1:])
 
-# reserved words
-reserved = {
-    'at': 'AT',
-    'in': 'IN',
-    'for': 'FOR',
-    'per': 'PER'
-}
-
-INFORMATION_UNIT = 'INFORMATION_UNIT'
-DURATION_UNIT = 'DURATION_UNIT'
-
-# all possible tokens
-tokens = ['NUMBER', INFORMATION_UNIT, DURATION_UNIT] + \
-         list(reserved.values())
-# precedence: t_* functions in the order they are defined, then regexes in
-#             descending order of length
-
-# specifies ignored characters
-t_ignore = ' \t'
-t_PER = r'/'  # TODO not happy with how this is a reserved word and normal token - make sure you're doing it in the cleanest way possible
-
-
-def t_newline(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
-
-
-# Error handling rule
-def t_error(t):
-    print('Illegal character \'{0}\''.format(t.value[0]))
-    t.lexer.skip(1)
-
-
-# token declarations of the form t_TOKENNAME
-# use regexes for simple tokens;
-# use functions for ones requiring special action code (docstring holds the regex)
-#t_PER = r'/'
-
-
-def t_NUMBER(t):
-    # t : LexToken
-    r'[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)'
-    t.value = float(t.value)
-    return t
-
-
-def t_UNIT(t):
-    r'[a-zA-Z]+'
-    if t.value in reserved.keys():
-        t.type = reserved[t.value]
-        return t
-
-    if t.value in Information._SYMBOLS.keys() or \
-            t.value in Information._CATEGORY_MAPS.keys():
-        t.type = INFORMATION_UNIT
-        return t
-
-    if t.value in Duration._SYMBOLS.keys():
-        t.type = DURATION_UNIT
-        return t
-
-    # drop it
-    # TODO should we spit out an error rather than silently swallow it?
-    return None
-
-
-# builds a lexer by creating a "master regular expression"
-# uses introspection to find everything defined above
-lexer = lex.lex()
-
-lexer.input(INPUT)
-
-for token in lexer:
-    # token : LexToken
-    logger.debug(
-        'Token(type: {0.type}, value: \'{0.value}\', line: {0.lineno}, '
-        'pos: {0.lexpos})'.format(token))
-
+# otherwise the parser cannot find the list of tokens
+tokens = Lexer.tokens
 
 precedence = (
     # lowest
@@ -274,10 +198,19 @@ def p_error(p):
         'Unable to parse expression: unexpected {0.type} token with value '
         '\'{0.value}\' after character {0.lexpos}'.format(p))
 
+lexer = Lexer()
+
 # Build the parser
 parser = yacc.yacc()
 
+print('Input: {0}'.format(INPUT))
+
 try:
-    print(parser.parse(INPUT))
-except ValueError as e:
+    # for token in lexer.lex(INPUT):
+    #     # token : LexToken
+    #     logger.debug(
+    #         'Token(type: {0.type}, value: \'{0.value}\', line: {0.lineno}, '
+    #         'pos: {0.lexpos})'.format(token))
+    print(parser.parse(INPUT, lexer=lexer.lexer))
+except LexingError as e:
     print(e, file=sys.stderr)
